@@ -28,9 +28,9 @@ def build_trainer(config, model, dataset):
 
         per_device_eval_batch_size=config.eval_batch_size,
 
-        num_train_epochs=config.epochs,
-
         gradient_accumulation_steps=config.gradient_accumulation_steps,
+
+        num_train_epochs=config.epochs,
 
         weight_decay=config.weight_decay,
 
@@ -66,9 +66,9 @@ def build_trainer(config, model, dataset):
 
         logging_steps=config.logging_steps,
 
-        report_to=config.report_to,
-
         logging_dir=config.logging_dir,
+
+        report_to=config.report_to,
 
         logging_first_step=True,
 
@@ -92,19 +92,12 @@ def build_trainer(config, model, dataset):
     )
 
     trainer = Trainer(
-
         model=model,
-
         args=training_args,
-
         train_dataset=dataset["train"],
-
         eval_dataset=dataset["validation"],
-
         data_collator=build_data_collator(config),
-
         compute_metrics=compute_metrics,
-
         callbacks=[early_stopping],
     )
 
