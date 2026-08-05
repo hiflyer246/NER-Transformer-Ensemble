@@ -1,0 +1,31 @@
+MODEL_NAME = "bert-large-cased"
+
+OUTPUT_DIR = "models/bert-large"
+
+LOGGING_DIR = "outputs/logs"
+
+LEARNING_RATE = 2e-5
+
+TRAIN_BATCH_SIZE = 8
+EVAL_BATCH_SIZE = 8
+
+NUM_EPOCHS = 3
+
+WEIGHT_DECAY = 0.01
+
+MAX_LENGTH = 512
+
+SEED = 42
+
+LOGGING_STEPS = 100
+
+SAVE_STRATEGY = "epoch"
+EVAL_STRATEGY = "epoch"
+
+SAVE_TOTAL_LIMIT = 2
+
+LOAD_BEST_MODEL_AT_END = True
+
+METRIC_FOR_BEST_MODEL = "f1"
+
+GREATER_IS_BETTER = True

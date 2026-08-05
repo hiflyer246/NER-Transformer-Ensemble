@@ -1,0 +1,68 @@
+{
+  "builder_name": "parquet",
+  "citation": "",
+  "config_name": "default",
+  "dataset_name": "conll2003",
+  "dataset_size": 10365662,
+  "description": "",
+  "download_size": 1611685,
+  "features": {
+    "input_ids": {
+      "feature": {
+        "dtype": "int32",
+        "_type": "Value"
+      },
+      "_type": "List"
+    },
+    "token_type_ids": {
+      "feature": {
+        "dtype": "int8",
+        "_type": "Value"
+      },
+      "_type": "List"
+    },
+    "attention_mask": {
+      "feature": {
+        "dtype": "int8",
+        "_type": "Value"
+      },
+      "_type": "List"
+    },
+    "labels": {
+      "feature": {
+        "dtype": "int64",
+        "_type": "Value"
+      },
+      "_type": "List"
+    }
+  },
+  "homepage": "",
+  "license": "",
+  "size_in_bytes": 11977347,
+  "splits": {
+    "train": {
+      "name": "train",
+      "num_bytes": 7007707,
+      "num_examples": 14041,
+      "dataset_name": "conll2003"
+    },
+    "validation": {
+      "name": "validation",
+      "num_bytes": 1758486,
+      "num_examples": 3250,
+      "dataset_name": "conll2003"
+    },
+    "test": {
+      "name": "test",
+      "num_bytes": 1599469,
+      "num_examples": 3453,
+      "dataset_name": "conll2003"
+    }
+  },
+  "version": {
+    "version_str": "0.0.0",
+    "major": 0,
+    "minor": 0,
+    "patch": 0
+  }
+}
