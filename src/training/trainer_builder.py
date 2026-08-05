@@ -1,6 +1,6 @@
 from transformers import Trainer, TrainingArguments
 
-from src.training.metrics import compute_metrics
+from src.evaluation.metrics import compute_metrics
 from src.training.data_collator import build_data_collator
 from src.training.callbacks import early_stopping
 
@@ -9,15 +9,15 @@ def build_trainer(config, model, dataset):
 
     training_args = TrainingArguments(
 
-        # ============================================
+        # =====================================================
         # Output
-        # ============================================
+        # =====================================================
 
         output_dir=config.output_dir,
 
-        # ============================================
+        # =====================================================
         # Training
-        # ============================================
+        # =====================================================
 
         do_train=True,
         do_eval=True,
@@ -36,9 +36,9 @@ def build_trainer(config, model, dataset):
 
         seed=config.seed,
 
-        # ============================================
+        # =====================================================
         # Evaluation
-        # ============================================
+        # =====================================================
 
         eval_strategy=config.eval_strategy,
 
@@ -46,9 +46,9 @@ def build_trainer(config, model, dataset):
 
         greater_is_better=config.greater_is_better,
 
-        # ============================================
+        # =====================================================
         # Saving
-        # ============================================
+        # =====================================================
 
         save_strategy=config.save_strategy,
 
@@ -58,9 +58,9 @@ def build_trainer(config, model, dataset):
 
         load_best_model_at_end=config.load_best_model_at_end,
 
-        # ============================================
+        # =====================================================
         # Logging
-        # ============================================
+        # =====================================================
 
         logging_strategy="steps",
 
@@ -72,17 +72,17 @@ def build_trainer(config, model, dataset):
 
         logging_first_step=True,
 
-        # ============================================
+        # =====================================================
         # Mixed Precision
-        # ============================================
+        # =====================================================
 
         fp16=config.fp16,
 
         bf16=config.bf16,
 
-        # ============================================
+        # =====================================================
         # Data Loader
-        # ============================================
+        # =====================================================
 
         dataloader_num_workers=2,
 
@@ -92,12 +92,19 @@ def build_trainer(config, model, dataset):
     )
 
     trainer = Trainer(
+
         model=model,
+
         args=training_args,
+
         train_dataset=dataset["train"],
+
         eval_dataset=dataset["validation"],
+
         data_collator=build_data_collator(config),
+
         compute_metrics=compute_metrics,
+
         callbacks=[early_stopping],
     )
 
