@@ -10,7 +10,7 @@ from src.model.tokenizer_factory import TokenizerFactory
 # bert / roberta / deberta / xlmr
 # =====================================================
 
-MODEL = "roberta"
+MODEL = "deberta"
 
 # =====================================================
 # Load Configuration
