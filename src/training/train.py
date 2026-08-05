@@ -1,4 +1,5 @@
 import argparse
+from pathlib import Path
 
 from src.utils.config_loader import get_config
 from src.data.dataset_factory import DatasetFactory
@@ -8,7 +9,9 @@ from src.training.trainer_builder import build_trainer
 
 def main():
 
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(
+        description="Train a Transformer model for Named Entity Recognition"
+    )
 
     parser.add_argument(
         "--model",
@@ -26,7 +29,6 @@ def main():
     config = get_config(args.model)
 
     print(config)
-
     print()
 
     print("=" * 80)
@@ -49,21 +51,40 @@ def main():
     print("Building Trainer")
     print("=" * 80)
 
-    trainer = build_trainer(config,model,dataset)
+    trainer = build_trainer(config, model, dataset)
 
     print()
 
     print("=" * 80)
-    print("Pipeline Ready")
+    print("Starting Training")
     print("=" * 80)
+
+    if config.resume_from_checkpoint:
+        trainer.train(resume_from_checkpoint=True)
+    else:
+        trainer.train()
 
     print()
 
-    print("Model :", config.model_name)
-    print("Output:", config.output_dir)
+    print("=" * 80)
+    print("Saving Model")
+    print("=" * 80)
 
-    # DO NOT TRAIN YET
-    # trainer.train()
+    output_path = Path(config.output_dir)
+    output_path.mkdir(parents=True, exist_ok=True)
+
+    trainer.save_model(config.output_dir)
+
+    if trainer.processing_class is not None:
+        trainer.processing_class.save_pretrained(config.output_dir)
+
+    print()
+
+    print("=" * 80)
+    print("Training Completed Successfully")
+    print("=" * 80)
+
+    print(f"Model saved to : {config.output_dir}")
 
 
 if __name__ == "__main__":

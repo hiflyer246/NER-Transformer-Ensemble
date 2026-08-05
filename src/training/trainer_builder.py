@@ -9,15 +9,17 @@ def build_trainer(config, model, dataset):
 
     training_args = TrainingArguments(
 
-        # ============================
+        # =====================================================
         # Output
-        # ============================
+        # =====================================================
 
         output_dir=config.output_dir,
 
-        # ============================
+        overwrite_output_dir=True,
+
+        # =====================================================
         # Training
-        # ============================
+        # =====================================================
 
         learning_rate=config.learning_rate,
 
@@ -25,17 +27,17 @@ def build_trainer(config, model, dataset):
 
         per_device_eval_batch_size=config.eval_batch_size,
 
-        num_train_epochs=config.epochs,
-
         gradient_accumulation_steps=config.gradient_accumulation_steps,
+
+        num_train_epochs=config.epochs,
 
         weight_decay=config.weight_decay,
 
         seed=config.seed,
 
-        # ============================
+        # =====================================================
         # Evaluation
-        # ============================
+        # =====================================================
 
         eval_strategy=config.eval_strategy,
 
@@ -43,9 +45,9 @@ def build_trainer(config, model, dataset):
 
         greater_is_better=config.greater_is_better,
 
-        # ============================
+        # =====================================================
         # Saving
-        # ============================
+        # =====================================================
 
         save_strategy=config.save_strategy,
 
@@ -55,9 +57,9 @@ def build_trainer(config, model, dataset):
 
         load_best_model_at_end=config.load_best_model_at_end,
 
-        # ============================
+        # =====================================================
         # Logging
-        # ============================
+        # =====================================================
 
         logging_steps=config.logging_steps,
 
@@ -65,13 +67,24 @@ def build_trainer(config, model, dataset):
 
         report_to=config.report_to,
 
-        # ============================
+        logging_first_step=True,
+
+        # =====================================================
         # Mixed Precision
-        # ============================
+        # =====================================================
 
         fp16=config.fp16,
 
         bf16=config.bf16,
+
+        # =====================================================
+        # Data Loading
+        # =====================================================
+
+        dataloader_num_workers=2,
+
+        dataloader_pin_memory=True,
+
     )
 
     trainer = Trainer(

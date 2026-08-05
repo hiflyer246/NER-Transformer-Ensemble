@@ -12,9 +12,7 @@ class BaseConfig:
     # =====================================================
 
     model_name: str
-
     output_dir: str
-
     dataset_path: str
 
     # =====================================================
@@ -23,9 +21,9 @@ class BaseConfig:
 
     learning_rate: float = 2e-5
 
-    train_batch_size: int = 8
-
-    eval_batch_size: int = 8
+    # Optimized for Tesla T4 (16 GB)
+    train_batch_size: int = 4
+    eval_batch_size: int = 4
 
     epochs: int = 3
 
@@ -35,7 +33,8 @@ class BaseConfig:
 
     seed: int = 42
 
-    gradient_accumulation_steps: int = 1
+    # Effective batch size = 4 × 2 = 8
+    gradient_accumulation_steps: int = 2
 
     # =====================================================
     # Logging
@@ -81,6 +80,8 @@ class BaseConfig:
     # Hardware
     # =====================================================
 
-    fp16: bool = False
+    # Mixed precision for Tesla T4
+    fp16: bool = True
 
+    # T4 does not support BF16 efficiently
     bf16: bool = False
