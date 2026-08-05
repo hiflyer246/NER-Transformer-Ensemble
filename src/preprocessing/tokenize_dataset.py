@@ -1,20 +1,54 @@
 from datasets import load_from_disk
-from transformers import AutoTokenizer
 import os
 
-MODEL_NAME = "bert-large-cased"
+from src.utils.config_loader import get_config
+from src.model.tokenizer_factory import TokenizerFactory
 
-print("Loading dataset...")
+# =====================================================
+# Select Model
+# Change only this line
+# bert / roberta / deberta / xlmr
+# =====================================================
+
+MODEL = "roberta"
+
+# =====================================================
+# Load Configuration
+# =====================================================
+
+config = get_config(MODEL)
+
+print("=" * 80)
+print("Configuration")
+print("=" * 80)
+print(config)
+
+# =====================================================
+# Load Dataset
+# =====================================================
+
+print("\nLoading CoNLL-2003 Dataset...")
+
 dataset = load_from_disk("data/raw/conll2003")
 
-print("Loading tokenizer...")
-tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
+# =====================================================
+# Load Tokenizer
+# =====================================================
 
+print("\nLoading Tokenizer...")
+
+tokenizer = TokenizerFactory.build(config)
+
+# =====================================================
+# Tokenization Function
+# =====================================================
 
 def tokenize_and_align_labels(example):
+
     tokenized_inputs = tokenizer(
         example["tokens"],
         truncation=True,
+        max_length=config.max_length,
         is_split_into_words=True,
     )
 
@@ -26,12 +60,15 @@ def tokenize_and_align_labels(example):
     for word_idx in word_ids:
 
         if word_idx is None:
+
             label_ids.append(-100)
 
         elif word_idx != previous_word_idx:
+
             label_ids.append(example["ner_tags"][word_idx])
 
         else:
+
             label_ids.append(-100)
 
         previous_word_idx = word_idx
@@ -41,23 +78,43 @@ def tokenize_and_align_labels(example):
     return tokenized_inputs
 
 
-print("Tokenizing dataset...")
+# =====================================================
+# Tokenize
+# =====================================================
+
+print("\nTokenizing Dataset...")
 
 tokenized_dataset = dataset.map(
     tokenize_and_align_labels,
     batched=False,
 )
 
-print("Removing unused columns...")
+# =====================================================
+# Remove Columns
+# =====================================================
+
+print("\nRemoving Unused Columns...")
 
 tokenized_dataset = tokenized_dataset.remove_columns(
-    ["id", "tokens", "pos_tags", "chunk_tags", "ner_tags"]
+    [
+        "id",
+        "tokens",
+        "pos_tags",
+        "chunk_tags",
+        "ner_tags",
+    ]
 )
 
 print(tokenized_dataset)
 
-os.makedirs("data/processed/bert-large", exist_ok=True)
+# =====================================================
+# Save
+# =====================================================
 
-tokenized_dataset.save_to_disk("data/processed/bert-large")
+os.makedirs(config.dataset_path, exist_ok=True)
 
-print("\nDataset successfully saved!")
+tokenized_dataset.save_to_disk(config.dataset_path)
+
+print("\nDataset Saved Successfully!")
+
+print("Location :", config.dataset_path)
