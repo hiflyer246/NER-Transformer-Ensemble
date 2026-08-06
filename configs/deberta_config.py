@@ -8,9 +8,9 @@ config = BaseConfig(
 
     dataset_path="data/processed/deberta-large",
 
-    # =====================================
+    # =====================================================
     # Training
-    # =====================================
+    # =====================================================
 
     learning_rate=1e-5,
 
@@ -18,15 +18,16 @@ config = BaseConfig(
 
     eval_batch_size=2,
 
-    gradient_accumulation_steps=4,
+    # TEMPORARY FOR DEBUGGING
+    gradient_accumulation_steps=1,
 
     epochs=3,
 
     weight_decay=0.01,
 
-    # =====================================
+    # =====================================================
     # Mixed Precision
-    # =====================================
+    # =====================================================
 
     fp16=False,
 

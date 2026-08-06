@@ -28,7 +28,13 @@ def build_trainer(config, model, dataset):
 
         per_device_eval_batch_size=config.eval_batch_size,
 
+        # -----------------------------------------------------
+        # TEMPORARY DEBUG SETTINGS
+        # -----------------------------------------------------
+
         gradient_accumulation_steps=config.gradient_accumulation_steps,
+
+        max_grad_norm=1.0,
 
         num_train_epochs=config.epochs,
 
@@ -64,7 +70,8 @@ def build_trainer(config, model, dataset):
 
         logging_strategy="steps",
 
-        logging_steps=config.logging_steps,
+        # Debug every 10 steps
+        logging_steps=10,
 
         logging_dir=config.logging_dir,
 
