@@ -1,22 +1,34 @@
-from datasets import load_from_disk
+import argparse
 import os
+
+from datasets import load_from_disk
 
 from src.utils.config_loader import get_config
 from src.model.tokenizer_factory import TokenizerFactory
 
+
 # =====================================================
-# Select Model
-# Change only this line
-# bert / roberta / deberta / xlmr
+# Command Line Arguments
 # =====================================================
 
-MODEL = "xlmr"
+parser = argparse.ArgumentParser(
+    description="Tokenize CoNLL-2003 dataset for Transformer models"
+)
+
+parser.add_argument(
+    "--model",
+    required=True,
+    choices=["bert", "roberta", "deberta", "xlmr"],
+    help="Model name to preprocess dataset for",
+)
+
+args = parser.parse_args()
 
 # =====================================================
 # Load Configuration
 # =====================================================
 
-config = get_config(MODEL)
+config = get_config(args.model)
 
 print("=" * 80)
 print("Configuration")
@@ -79,7 +91,7 @@ def tokenize_and_align_labels(example):
 
 
 # =====================================================
-# Tokenize
+# Tokenize Dataset
 # =====================================================
 
 print("\nTokenizing Dataset...")
@@ -90,7 +102,7 @@ tokenized_dataset = dataset.map(
 )
 
 # =====================================================
-# Remove Columns
+# Remove Unused Columns
 # =====================================================
 
 print("\nRemoving Unused Columns...")
@@ -108,7 +120,7 @@ tokenized_dataset = tokenized_dataset.remove_columns(
 print(tokenized_dataset)
 
 # =====================================================
-# Save
+# Save Dataset
 # =====================================================
 
 os.makedirs(config.dataset_path, exist_ok=True)
@@ -116,5 +128,6 @@ os.makedirs(config.dataset_path, exist_ok=True)
 tokenized_dataset.save_to_disk(config.dataset_path)
 
 print("\nDataset Saved Successfully!")
+print("Location:", config.dataset_path)
 
-print("Location :", config.dataset_path)
+print("\nDone.")
