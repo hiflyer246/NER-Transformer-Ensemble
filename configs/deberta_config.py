@@ -1,28 +1,54 @@
-from configs.base_config import BaseConfig
+from dataclasses import dataclass
 
-config = BaseConfig(
 
-    model_name="microsoft/deberta-v3-large",
+@dataclass
+class BaseConfig:
 
-    output_dir="models/deberta-large",
+    # Model
+    model_name: str
 
-    dataset_path="data/processed/deberta-large",
+    # Paths
+    output_dir: str
+    dataset_path: str
 
-    learning_rate=1e-5,
+    # Training
+    learning_rate: float = 1e-5
+    train_batch_size: int = 2
+    eval_batch_size: int = 2
+    epochs: int = 3
+    weight_decay: float = 0.01
 
-    train_batch_size=2,
+    # Tokenization
+    max_length: int = 512
 
-    eval_batch_size=2,
+    # Reproducibility
+    seed: int = 42
 
-    gradient_accumulation_steps=1,
+    # Gradient accumulation
+    gradient_accumulation_steps: int = 1
 
-    epochs=3,
+    # Logging
+    logging_steps: int = 100
+    logging_dir: str = "outputs/logs"
+    report_to: str = "none"
 
-    weight_decay=0.01,
+    # Evaluation
+    eval_strategy: str = "epoch"
+    metric_for_best_model: str = "f1"
+    greater_is_better: bool = True
 
-    fp16=False,
+    # ===============================
+    # Checkpoint Saving
+    # ===============================
+    save_strategy: str = "steps"
+    save_steps: int = 1000
+    save_total_limit: int = 5
+    load_best_model_at_end: bool = True
+    save_safetensors: bool = True
 
-    bf16=False,
+    # Resume
+    resume_from_checkpoint: bool = False
 
-    resume_from_checkpoint=True,
-)
+    # Mixed Precision
+    fp16: bool = False
+    bf16: bool = False
