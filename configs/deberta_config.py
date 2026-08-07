@@ -32,4 +32,10 @@ config = BaseConfig(
     fp16=False,
 
     bf16=False,
+
+    # =====================================================
+    # Resume Training
+    # =====================================================
+
+    resume_from_checkpoint=True,
 )
